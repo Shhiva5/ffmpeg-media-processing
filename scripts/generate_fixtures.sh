@@ -14,7 +14,7 @@
 #     real, irregular presentation timestamps instead of forcing them onto
 #     a constant grid. Expected ground truth for frame count/timing is
 #     printed at the end and should be recorded before running media-core
-#     against it (see EVIDENCE.md).
+#     against it.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
