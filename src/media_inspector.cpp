@@ -4,6 +4,7 @@
 #include <chrono>
 #include <cmath>
 #include <cstdio>
+#include <limits>
 
 extern "C" {
 #include <libavutil/avutil.h>
@@ -58,6 +59,11 @@ double MediaInspector::tsToSeconds(int64_t ts) const {
 int64_t MediaInspector::secondsToTs(double seconds) const {
     return start_time_ticks_ +
            static_cast<int64_t>(std::llround(seconds / av_q2d(stream_time_base_)));
+}
+
+bool MediaInspector::underTraceLimit(size_t current_size) const {
+    if (opts_.trace_limit < 0) return true;  // -1 => unlimited
+    return current_size < static_cast<size_t>(opts_.trace_limit);
 }
 
 // ---------------------------------------------------------------------------
@@ -226,7 +232,7 @@ bool MediaInspector::buildKeyframeIndexAndPacketTrace() {
             continue;
         }
 
-        if (static_cast<int>(packet_trace_.size()) < opts_.trace_limit) {
+        if (underTraceLimit(packet_trace_.size())) {
             PacketTraceEntry entry;
             entry.index = packet_index;
             entry.has_dts = pkt->dts != AV_NOPTS_VALUE;
@@ -306,8 +312,12 @@ bool MediaInspector::decodeBoundedTraceAndCfrVfrVerdict() {
     std::vector<double> pts_seconds;
     // Sample enough frames for a meaningful CFR/VFR verdict even when the
     // reported trace_limit is small; independent of what gets *written* to
-    // the report.
-    const int cfr_vfr_sample_target = std::max(opts_.trace_limit, 120);
+    // the report. When trace_limit is -1 ("unlimited"), we decode the whole
+    // file anyway to populate frame_trace, so let the CFR/VFR sample run to
+    // EOF too rather than stopping early on an arbitrary cap.
+    const int cfr_vfr_sample_target =
+        (opts_.trace_limit < 0) ? std::numeric_limits<int>::max()
+                                 : std::max(opts_.trace_limit, 120);
 
     bool decoding = true;
     while (decoding) {
@@ -346,7 +356,7 @@ bool MediaInspector::decodeBoundedTraceAndCfrVfrVerdict() {
                 double pts_s = tsToSeconds(best_ts);
                 pts_seconds.push_back(pts_s);
 
-                if (static_cast<int>(frame_trace_.size()) < opts_.trace_limit) {
+                if (underTraceLimit(frame_trace_.size())) {
                     FrameTraceEntry fe;
                     fe.presentation_index = static_cast<int>(frame_trace_.size());
                     fe.pts_s = pts_s;

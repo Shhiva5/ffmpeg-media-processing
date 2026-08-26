@@ -1,9 +1,14 @@
 // media-core: a small command-line tool built directly on FFmpeg's
-// libavformat/libavcodec APIs.
+// libavformat/libavcodec APIs. See README.md for usage and DECISIONS.md for
+// design rationale.
 //
 // Usage:
 //   media-core <input> --targets 0.0,0.5,1.1,4.75 --output report.json
 //                       [--trace-limit N]
+//
+// --trace-limit N: keep at most N entries in packet_trace/frame_trace.
+//                   N = -1 means unlimited (report every packet/frame in
+//                   the file). Default: 64.
 #include <cstdio>
 #include <fstream>
 #include <iostream>

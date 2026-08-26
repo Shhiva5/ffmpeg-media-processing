@@ -77,7 +77,7 @@ This produces two binaries in `build/`:
 - `--trace-limit` — max number of entries kept in `packet_trace` and
   `frame_trace` in the report; keyframe index and CFR/VFR analysis still
   scan the whole file regardless of this value (default: 64)
-  
+
 Example:
 
 ```bash

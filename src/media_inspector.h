@@ -120,7 +120,14 @@ public:
     struct Options {
         // Cap on how many packets/frames are kept in the *reported* trace.
         // Analysis (keyframe index, CFR/VFR verdict) still scans the whole
-        // file; this only bounds what gets written to the JSON report.
+        // file regardless of this value; it only bounds what gets written
+        // to packet_trace/frame_trace in the JSON report.
+        //   >= 0  -> keep at most that many entries (0 means "trace empty,
+        //            but still note it ran").
+        //   -1    -> unlimited: keep every packet/frame from the start of
+        //            the file. Note this means decodeBoundedTraceAndCfrVfrVerdict
+        //            decodes the entire file, which is fine for short
+        //            fixtures but can be slow/memory-heavy on long inputs.
         int trace_limit = 64;
     };
 
@@ -181,6 +188,10 @@ private:
     bool rewindToStart();
 
     double findSeekKeyframeFor(double target_seconds) const;
+
+    // True if another entry may still be appended to a trace vector of the
+    // given current size, given opts_.trace_limit (-1 == unlimited).
+    bool underTraceLimit(size_t current_size) const;
 
     void closeCodecAndFormat();
 };
