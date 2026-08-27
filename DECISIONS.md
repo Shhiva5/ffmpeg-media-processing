@@ -94,6 +94,36 @@
    beyond what naturally falls out of the general seek+decode-forward loop
    — these were treated as the "optional third fixture" per the spec and
    not built out.
+## Revision: T=1.1s and fps=30.0 made into CLI arguments
+
+The `checkCfrFixture` assertions originally hardcoded the target time
+(`1.1`) and frame rate (`30.0`) used to compute the pass/fail tolerance.
+Both are now `--target`/`--fps` CLI flags (still defaulting to `1.1`/`30`
+so existing invocations keep working unchanged), because hardcoding them
+had two real problems: (1) pointing the runner at a differently-encoded CFR
+fixture would silently use the wrong fps and produce a meaningless
+tolerance, and (2) there was no way to test a *different* target time
+without editing the source.
+
+This surfaced a genuine design gap while testing it: the CFR fixture's
+other existing target, `T=2.4999`, is deliberately placed one tick before a
+frame boundary (2.5s) specifically to prove the tool doesn't round to the
+nearest frame (see `EVIDENCE.md` §4). But the *correct* answer for that
+target has ~1 full frame of timing error relative to the target itself
+(selected PTS 2.4667s vs. target 2.4999s) — which means the "within half a
+frame of --target" check that works for interior targets like 1.1s would
+incorrectly fail a *correct* implementation at a deliberately-boundary
+target. Rather than leave that as a trap, `--expected-pts` was added: for
+boundary targets, pass the known-correct exact PTS and the check compares
+against that instead of against `--target` itself. The default (no
+`--expected-pts`) path is unchanged for ordinary interior targets.
+
+Also added: a self-consistency check that `--fps` actually matches the
+report's own measured `avg_frame_rate` before it's trusted for the
+tolerance calculation, and CLI-level validation (non-numeric, zero/negative
+fps, negative target) that exits with a clear error rather than silently
+producing a nonsensical tolerance or a confusing downstream failure.
+
 ## Revision: test runner interface
 
 The first version of `media-core-tests` took two positional arguments

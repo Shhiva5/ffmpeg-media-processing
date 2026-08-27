@@ -122,17 +122,24 @@ bonus evidence.
 ./build/media-core fixtures/vfr_known_pts.mp4 \
     --targets 0.2,0.75,1.9 --output /tmp/vfr_report.json --trace-limit 80
 
-./build/media-core-tests cfr /tmp/cfr_report.json
+./build/media-core-tests cfr /tmp/cfr_report.json --target 1.1 --fps 30
 ./build/media-core-tests vfr /tmp/vfr_report.json
 ```
 
 `media-core-tests` is a small dependency-free assertion runner (no gtest, to
 keep the dependency list short) that checks one JSON *report* per invocation
-against known ground truth for a named fixture type (`cfr` or `vfr`) — see
-`tests/test_assertions.cpp` for what each of the 9 assertions (6 for `cfr`,
-3 for `vfr`) catches, and why the two fixture types need separate checks
-rather than sharing one set (each catches a different class of bug that the
-other fixture wouldn't exercise).
+against known ground truth for a named fixture type (`cfr` or `vfr`). The
+target time and expected frame rate for the `cfr` fixture are real CLI
+arguments (`--target`, `--fps`, default `1.1`/`30`), not hardcoded — the
+binary validates them (rejects non-numeric/zero/negative values with a
+clear error) and cross-checks `--fps` against the report's own measured
+`avg_frame_rate` before trusting it for tolerance calculations. For targets
+placed deliberately near a frame boundary (where the correct answer can
+legitimately be ~1 frame away from the target itself), pass
+`--expected-pts` instead of relying on the default target-relative
+tolerance — see the comment block at the top of `tests/test_assertions.cpp`
+for a worked example. See that file for what each of the 9 default-mode
+assertions (7 for `cfr`, 3 for `vfr`) catches.
 
 ## Feature list
 
