@@ -122,13 +122,17 @@ bonus evidence.
 ./build/media-core fixtures/vfr_known_pts.mp4 \
     --targets 0.2,0.75,1.9 --output /tmp/vfr_report.json --trace-limit 80
 
-./build/media-core-tests /tmp/cfr_report.json /tmp/vfr_report.json
+./build/media-core-tests cfr /tmp/cfr_report.json
+./build/media-core-tests vfr /tmp/vfr_report.json
 ```
 
 `media-core-tests` is a small dependency-free assertion runner (no gtest, to
-keep the dependency list short) that checks the JSON *reports* against known
-ground truth — see `tests/test_assertions.cpp` for what each of the 9
-assertions catches.
+keep the dependency list short) that checks one JSON *report* per invocation
+against known ground truth for a named fixture type (`cfr` or `vfr`) — see
+`tests/test_assertions.cpp` for what each of the 9 assertions (6 for `cfr`,
+3 for `vfr`) catches, and why the two fixture types need separate checks
+rather than sharing one set (each catches a different class of bug that the
+other fixture wouldn't exercise).
 
 ## Feature list
 

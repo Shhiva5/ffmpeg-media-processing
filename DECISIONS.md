@@ -94,6 +94,24 @@
    beyond what naturally falls out of the general seek+decode-forward loop
    — these were treated as the "optional third fixture" per the spec and
    not built out.
+## Revision: test runner interface
+
+The first version of `media-core-tests` took two positional arguments
+(`<cfr_report.json> <vfr_report.json>`) and ran both fixtures' checks in one
+process. This was refactored to `media-core-tests <cfr|vfr> <report.json>`
+— one report and a fixture-type label per invocation — because the original
+two-argument shape didn't scale: adding a third fixture (e.g. the optional
+non-zero-start-time case) would have meant changing the binary's argument
+list and every call site again. The new shape adds a fixture type by adding
+a dispatch branch, not by changing the interface. Total assertion count and
+results are unchanged (9 checks, now reported as 6 for `cfr` + 3 for `vfr`
+rather than one combined 9/9); each fixture type still needs its own
+checks, since the CFR and VFR fixtures each catch a different class of bug
+that the other wouldn't exercise — see the comment block at the top of
+`tests/test_assertions.cpp` for the specific example (an always-CFR
+classifier would pass every CFR-fixture check by accident, since the CFR
+fixture is *supposed* to report CFR; only the VFR fixture's checks would
+catch that bug).
 
 ## Next two engineering steps
 

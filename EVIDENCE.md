@@ -133,20 +133,26 @@ confirms the classifier separates the two fixtures cleanly.
 ```
 $ ./build/media-core fixtures/cfr_bframes.mp4 --targets 0.0,0.5,1.1,2.4999 --output /tmp/cfr_report.json --trace-limit 150
 $ ./build/media-core fixtures/vfr_known_pts.mp4 --targets 0.2,0.75,1.9 --output /tmp/vfr_report.json --trace-limit 80
-$ ./build/media-core-tests /tmp/cfr_report.json /tmp/vfr_report.json
+$ ./build/media-core-tests cfr /tmp/cfr_report.json
 PASS: CFR fixture: verdict is CFR
 PASS: CFR fixture: frame_requests present
 PASS: CFR fixture: T=1.1s frame found
 PASS: CFR fixture: T=1.1s timing_error_s (0.000000s) within half-frame tolerance (0.016667s)
 PASS: CFR fixture: T=1.1s target was actually requested (update fixture target list if this fails)
 PASS: CFR fixture: frame_trace PTS values are monotonically non-decreasing (presentation order)
+
+6/6 checks passed
+$ ./build/media-core-tests vfr /tmp/vfr_report.json
 PASS: VFR fixture: verdict is VFR (catches false-CFR misclassification)
 PASS: VFR fixture: mean_frame_interval_s is positive
 PASS: VFR fixture: coefficient of variation exceeds the CFR/VFR threshold used to classify it (internal consistency check)
 
-9/9 checks passed
+3/3 checks passed
 ```
-Exit code `0`.
+Exit code `0` for both. (9 checks total across the two invocations, unchanged
+from the original combined-binary design — see `DECISIONS.md` for why the
+runner was refactored to take one report + a fixture-type label per
+invocation instead of two positional file paths.)
 
 ## 7. Failure-handling evidence
 
