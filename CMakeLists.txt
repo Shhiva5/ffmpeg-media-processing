@@ -33,3 +33,8 @@ target_link_libraries(media-core PRIVATE PkgConfig::FFMPEG)
 
 target_compile_options(media-core PRIVATE -Wall -Wextra)
 
+# Simple assertion test binary (see tests/README for what it checks)
+add_executable(media-core-tests
+    tests/test_assertions.cpp
+)
+target_include_directories(media-core-tests PRIVATE ${CMAKE_SOURCE_DIR}/third_party)

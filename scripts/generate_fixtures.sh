@@ -14,7 +14,7 @@
 #     real, irregular presentation timestamps instead of forcing them onto
 #     a constant grid. Expected ground truth for frame count/timing is
 #     printed at the end and should be recorded before running media-core
-#     against it.
+#     against it (see EVIDENCE.md).
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -29,11 +29,11 @@ ffmpeg -y -hide_banner -loglevel error \
     -bf 2 -g 30 -sc_threshold 0 \
     cfr_bframes.mp4
 echo "  wrote cfr_bframes.mp4"
-ffprobe -v error -select_streams v:0 -show_entries frame=pts_time,pkt_dts_time \
+ffprobe -v error -select_streams v:0 -show_entries frame=best_effort_timestamp_time \
     -of csv=p=0 cfr_bframes.mp4 > cfr_bframes.ground_truth_pts.txt
 CFR_FRAME_COUNT=$(wc -l < cfr_bframes.ground_truth_pts.txt | tr -d ' ')
 echo "  ground truth: $CFR_FRAME_COUNT frames; expected PTS = frame_index / 30, exact,"
-echo "  keyframes every 30 frames (t=0,1,2,3,4s); see $FIXTURES_DIR/cfr_bframes.ground_truth_pts.txt"
+echo "  keyframes every 30 frames (t=0,1,2,3,4s); see cfr_bframes.ground_truth_pts.txt"
 
 echo
 echo "== Fixture 2: vfr_known_pts.mp4 (genuine VFR) =="
@@ -76,7 +76,7 @@ echo "  wrote vfr_known_pts.mp4"
 # per-frame PTS via ffprobe (used here strictly as a comparison oracle, per
 # the assessment rules) immediately after generation so ground truth is
 # always derived from the actual file, not from a comment.
-ffprobe -v error -select_streams v:0 -show_entries frame=pts_time,pkt_dts_time \
+ffprobe -v error -select_streams v:0 -show_entries frame=best_effort_timestamp_time \
     -of csv=p=0 vfr_known_pts.mp4 > vfr_known_pts.ground_truth_pts.txt
 FRAME_COUNT=$(wc -l < vfr_known_pts.ground_truth_pts.txt | tr -d ' ')
 echo "  ground truth: $FRAME_COUNT frames; per-frame PTS written to"

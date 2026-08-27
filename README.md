@@ -63,6 +63,7 @@ cd ..
 This produces two binaries in `build/`:
 
 - `media-core` — the CLI tool
+- `media-core-tests` — the automated assertion runner (see "Testing" below)
 
 ## Running
 
@@ -105,7 +106,8 @@ or copyrighted media) into `fixtures/`:
 - `vfr_known_pts.mp4` — genuinely variable frame rate, built by concatenating
   three segments encoded at different source frame rates (12/30/8fps) and
   remuxing with `-vsync vfr` so real per-frame PTS irregularity is
-  preserved. Ground truth (measured via `ffprobe`, not hand-predicted): `fixtures/vfr_known_pts.ground_truth_pts.txt`.
+  preserved. Ground truth (measured via `ffprobe`, not hand-predicted — see
+  `DECISIONS.md`): `fixtures/vfr_known_pts.ground_truth_pts.txt`.
 
 A third "difficult case" fixture (non-zero start time / sparse keyframes /
 truncated file) was **not** submitted; per the assessment this is optional
@@ -119,7 +121,14 @@ bonus evidence.
 
 ./build/media-core fixtures/vfr_known_pts.mp4 \
     --targets 0.2,0.75,1.9 --output /tmp/vfr_report.json --trace-limit 80
+
+./build/media-core-tests /tmp/cfr_report.json /tmp/vfr_report.json
 ```
+
+`media-core-tests` is a small dependency-free assertion runner (no gtest, to
+keep the dependency list short) that checks the JSON *reports* against known
+ground truth — see `tests/test_assertions.cpp` for what each of the 9
+assertions catches.
 
 ## Feature list
 
@@ -136,8 +145,9 @@ bonus evidence.
   rule (see `MediaInspector::selectionRuleText()`), including both boundary
   cases (`clamped_to_first_frame`, `clamped_to_last_frame`)
 - Structured error handling for missing/unsupported/truncated/audio-only
-  inputs; the tool never crashes on these inputs and
-  frees all FFmpeg resources on every exit path.
+  inputs; the tool never crashes on these inputs (see `EVIDENCE.md`) and
+  frees all FFmpeg resources on every exit path (verified with Valgrind, 0
+  definitely/indirectly lost bytes — see `EVIDENCE.md`)
 
 ## Known limitations
 
