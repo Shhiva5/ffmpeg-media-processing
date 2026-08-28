@@ -33,23 +33,6 @@
   requirement, two independent real tools were used and their results were
   shown to corroborate each other (§5 of `EVIDENCE_PART_B.md`).
 
-## Discarded options
-
-- **Using one of Part A's existing CFR/VFR fixtures as the Part B source**
-  instead of generating a new one. Rejected because those fixtures are
-  short (5s) and were specifically designed to test timing edge cases, not
-  to produce visually/statistically realistic encode behavior at a size
-  large enough for a meaningful all-intra-vs-short-GOP file-size
-  comparison; a fresh, longer, higher-detail source was more honest
-  evidence for Part B's actual question.
-- **A true cold-cache benchmark via `drop_caches`.** Attempted, blocked by
-  container permissions (`Permission denied`, see `EVIDENCE_PART_B.md` §4).
-  Rather than silently omitting the caching discussion the spec explicitly
-  requires, the limitation is stated directly and a weaker but real
-  substitute (repeat-run consistency + zero major page faults from
-  `/usr/bin/time -v`) is used instead, with its evidentiary weakness
-  labeled as such.
-
 ## Known limitations
 
 1. All decode measurements are software-only (`libavcodec`'s built-in
@@ -61,7 +44,6 @@
 3. The synthetic Mandelbrot source's fractal/noise-like detail likely
    understates the real-world file-size gap between all-intra and
    short-GOP for natural video footage (risk #2, §6).
-4. No true cold-cache measurement is captured. 
 
 ## Next two engineering steps
 

@@ -74,7 +74,7 @@ echo "  wrote vfr_known_pts.mp4"
 # does not always match the source segment rates exactly (confirmed during
 # development of this fixture: it did not). We dump the real, measured
 # per-frame PTS via ffprobe (used here strictly as a comparison oracle, per
-# the assessment rules) immediately after generation so ground truth is
+# the project's own rules) immediately after generation so ground truth is
 # always derived from the actual file, not from a comment.
 ffprobe -v error -select_streams v:0 -show_entries frame=best_effort_timestamp_time \
     -of csv=p=0 vfr_known_pts.mp4 > vfr_known_pts.ground_truth_pts.txt

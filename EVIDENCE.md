@@ -47,7 +47,7 @@ not three clean segments. This is because the `concat` demuxer + `-vsync
 vfr` did not preserve each segment's exact source frame rate the way I
 initially assumed. The fixture is still genuinely variable-frame-rate (two
 very different, non-jittery interval regimes plus a large outlier gap),
-which is what the spec requires, but I'm flagging the discrepancy between
+which is what correct VFR handling requires, but I'm flagging the discrepancy between
 my prediction and reality per the "state expected behaviour before running
 the tool" instruction — see the ground-truth `.txt` files for the real,
 measured values, which is what `test_assertions.cpp` is actually checked

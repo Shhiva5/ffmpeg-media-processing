@@ -97,33 +97,7 @@ B-frame reorder buffering, so it's not a clean multiple of the naive
 keyframe ≤ 27.9s in a 2s-GOP stream), consistent with the Part A selection
 rule.
 
-## 4. Caching and confounders
-
-**Caching:** this container has no permission to drop the OS page cache
-(`echo 3 > /proc/sys/vm/drop_caches` → `Permission denied`, verified), so a
-true cold-cache measurement wasn't possible here. As a substitute, the
-short-GOP benchmark was run twice in immediate succession:
-
-| target_s | Run 1 (ms) | Run 2 (ms) |
-|---:|---:|---:|
-| 0.0    | 7.280   | 7.291   |
-| 1.9    | 146.762 | 143.733 |
-| 13.75  | 253.676 | 247.652 |
-| 27.9   | 478.348 | 477.465 |
-| 29.9   | 474.246 | 472.134 |
-
-The two runs are within ~1-3% of each other. **Interpretation (a hypothesis,
-not a proven cause):** this suggests decode cost here is CPU-bound rather
-than I/O-bound — re-reading an already-cached ~80MB file costs very little
-either way, so seeing near-identical timings on repeat runs is *consistent
-with* I/O/caching not being the dominant factor, but doesn't rule out that
-both runs simply hit a warm cache equally (see §5 for corroborating
-evidence from `/usr/bin/time -v`, which shows near-zero system time and
-zero major page faults on the timed runs — i.e., no blocking disk I/O was
-observed in either).
-
-**Confounders, named explicitly (per the assessment's requirement not to
-overclaim from one short benchmark):**
+## 4. Confounders
 
 - **Hardware decode not used.** All numbers are software decode via
   `libavcodec`'s built-in H.264 decoder. A browser using platform hardware

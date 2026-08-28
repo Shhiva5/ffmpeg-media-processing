@@ -6,7 +6,7 @@
 # short-GOP comparison), then derives two 720p H.264 proxy variants from it:
 # all-intra and short-GOP.
 #
-# All media here is synthetic (lavfi-generated), per the assessment's
+# All media here is synthetic (lavfi-generated), per this project's
 # "public, synthetic or self-owned media only" rule.
 #
 # The settings below (30s duration, shallower end_scale=0.02, 

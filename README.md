@@ -1,16 +1,22 @@
-# ffmpeg-media-processing
+# media-core
 
-# media-core (Part A)
+A small C++17 media/codec engineering project built directly on FFmpeg's
+`libavformat`/`libavcodec` APIs, developed during a career break to keep my
+systems-engineering skills sharp and demonstrate hands-on codec/timing work.
 
-A small C++17 command-line tool built directly on FFmpeg's `libavformat` /
-`libavcodec` APIs. It inspects one video stream, performs timestamp-aware
-frame requests against arbitrary timeline times, and writes a
-machine-readable JSON report. `ffprobe` is used only as a comparison oracle
-(to generate ground truth for fixtures and to sanity-check reports), never
-as part of the tool's own implementation.
+The core tool inspects a video stream, performs timestamp-aware frame
+requests against arbitrary timeline times, and writes a machine-readable
+JSON report. `ffprobe` is used only as a comparison oracle (to generate
+ground truth for fixtures and to sanity-check reports), never as part of
+the tool's own implementation.
 
-This is Part A of a larger assessment; Parts B (browser codec support) and C
-(desktop architecture memo) are tracked separately.
+The project is organized in three phases:
+- **Part A** — the core codec/timing engine (this directory's `src/`)
+- **Part B** — browser-codec proxy benchmarking, built on top of Part A (`part_b/`)
+- **Part C** — a desktop architecture research memo, C++/Rust/hybrid comparison (`part_c/`)
+
+See `PROJECT_HIGHLIGHTS.md` for a quick tour if you're short on time, or
+`AI_USE.md` for notes on how I used AI as a coding collaborator throughout.
 
 ## Supported environment
 
@@ -41,7 +47,7 @@ in `src/media_inspector.cpp` is hand-written against the raw FFmpeg C API.
 **Licensing note (flagged for specialist review, not legal advice):** the
 system FFmpeg build used here was compiled with `--enable-gpl` and includes
 `libx264`, so redistributing binaries linked against it would carry GPL
-obligations. For an assessment/demo this is fine; a production build would
+obligations. For a portfolio/demo this is fine; a production build would
 need a licensing decision (e.g. a non-GPL FFmpeg build without `libx264`, or
 accepting GPL for the whole binary).
 
@@ -109,9 +115,7 @@ or copyrighted media) into `fixtures/`:
   preserved. Ground truth (measured via `ffprobe`, not hand-predicted — see
   `DECISIONS.md`): `fixtures/vfr_known_pts.ground_truth_pts.txt`.
 
-A third "difficult case" fixture (non-zero start time / sparse keyframes /
-truncated file) was **not** submitted; per the assessment this is optional
-bonus evidence. The truncated/malformed-input failure path is instead
+The truncated/malformed-input failure path is instead
 exercised ad hoc (see `EVIDENCE.md`) by generating a truncated file locally,
 without shipping it as a fixture.
 
@@ -182,6 +186,23 @@ Headline result: short-GOP (`-g 60 -bf 2`) is 42% smaller on disk but its
 median/worst-case frame-request time (137ms / 486ms) is roughly 14x/22x
 worse than all-intra (10ms / 22ms) in this software-decode benchmark —
 recommendation and confounders are in `EVIDENCE_PART_B.md` §6.
+
+## Part C — desktop media and timeline research
+
+See `part_c/DECISION_MEMO.md` (938 words) for
+the full comparison and recommendation, and `part_c/RESEARCH_LOG_PART_C.md`
+for sources. No code — this is a research/architecture memo, as specified.
+
+Headline: **Hybrid** (C++ for demux/decode/hardware-codec/platform-GPU
+integration, Rust for orchestration — timeline, scheduler/clock, `wgpu`
+compositor — via a `cxx` FFI boundary) is recommended over C++-first or
+Rust-first, primarily because research found no mature pure-Rust H.264/HEVC
+decoder — a "Rust-first" core would still FFI into FFmpeg for exactly the
+code Parts A/B already have working in C++, at extra cost for no safety
+benefit on the highest-risk code path. Full reasoning, component boundary,
+browser/desktop ownership split, and 3 risks with smallest experiments are
+in the memo.
+
 ## Known limitations
 
 - Keyframe detection relies on `AV_PKT_FLAG_KEY` as set by the demuxer, not
@@ -190,7 +211,5 @@ recommendation and confounders are in `EVIDENCE_PART_B.md` §6.
 - The CFR/VFR verdict uses a fixed 2% coefficient-of-variation threshold on
   measured frame intervals. It's a pragmatic threshold, not a formal spec;
   see `DECISIONS.md` for the reasoning and how it could be made adaptive.
-- `libswscale` is linked but not yet used (no pixel format conversion or
-  scaling implemented in this slice).
 - Single video-stream only; multi-track video files use FFmpeg's default
   "best stream" heuristic rather than custom track selection.

@@ -2,7 +2,7 @@
 //
 // Thin wrapper around FFmpeg's libavformat/libavcodec that implements the
 // "first slice of a reusable media core" described in Part A of the
-// assessment: stream inspection, a bounded packet/frame trace, a keyframe
+// project: stream inspection, a bounded packet/frame trace, a keyframe
 // index, and timestamp-aware frame requests with an explicit selection rule.
 //
 // Design notes (see DECISIONS.md for the full rationale):

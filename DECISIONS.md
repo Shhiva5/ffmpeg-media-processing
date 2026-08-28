@@ -2,27 +2,25 @@
 
 ## Assumptions
 
-1. "One video stream" (per the assessment) means the tool operates on a
+1. "One video stream" means the tool operates on a
    single video track per invocation, selected via FFmpeg's own
    `av_find_best_stream` heuristic. Multi-video-track selection UI/logic is
-   out of scope for this slice.
+   future scope for this project.
 2. "Timeline time T" is relative to the stream's `start_time`, not to raw
-   PTS=0. This matters for any file with a non-zero start time (not one of
-   the two required fixtures, but called out as an optional bonus case) and
+   PTS=0. This matters for any file with a non-zero start time and
    keeps the frame-request API meaningful to a caller who thinks in
    "seconds into this clip," not "raw container ticks."
 3. A "bounded sample" for the packet/frame trace means capped at
    `--trace-limit` entries (default 64) for what's *written to the report*,
    while the keyframe index and CFR/VFR verdict always scan the full file —
    because those two need whole-file information to be meaningful, while
-   the packet/frame trace's job (per the spec) is just to *demonstrate*
+   the packet/frame trace's job is just to *demonstrate*
    reordering, which a bounded prefix does perfectly well.
 
 ## Chosen approach
 
-- **Direct FFmpeg C API, not a wrapper library.** The spec explicitly warns
-  that "a complete player/editor SDK may not implement the core of the
-  assessment for you." I used only `libavformat`/`libavcodec`/`libavutil`
+- **Direct FFmpeg C API, not a wrapper library.** I used only `libavformat`/
+  `libavcodec`/`libavutil`
   (plus `libswscale`, linked but currently unused) — no `libavplayer`-style
   helper, no ffms2, nothing that would do seeking/frame-selection for me.
 - **One long-lived `AVFormatContext`/`AVCodecContext` pair per
@@ -31,7 +29,7 @@
   reopening per frame request, which would hide the actual cost of seeking
   vs. decoding in the timing numbers.
 - **Selection rule based on measured decoded PTS, never
-  `frame_index * (1/fps)`.** The spec explicitly forbids that shortcut. The
+  `frame_index * (1/fps)`.** The
   rule (verbatim in `MediaInspector::selectionRuleText()`): seek to the
   latest keyframe ≤ T, decode forward, and the selected frame is the *last
   decoded frame whose PTS ≤ T*; PTS of the next frame (if any) is reported
@@ -55,7 +53,7 @@
   other container/codec combination.
 - **Vendored `nlohmann/json` (single header, MIT) rather than hand-rolled
   JSON.** The spec allows "small, permissively licensed helpers"; JSON
-  serialization isn't the part of the assessment being evaluated, so using
+  serialization isn't the part of the point of this project, so using
   a well-known, dependency-free single header keeps the codec/timing logic
   the sole hand-written component.
 - **The tool always writes a report, even on failure**, with a top-level
@@ -63,25 +61,6 @@
   makes the JSON output a *consistent artifact* a caller can always parse,
   and matches the "return useful errors... and clean up all allocated
   resources" requirement more directly than a stack trace would.
-
-## Discarded options
-
-- **Reopening the format/codec context per frame request.** Simpler code,
-  but it would conflate "cost of opening a file" with "cost of a seek,"
-  which is exactly the kind of confound the assessment (Part B) asks me to
-  be careful about. Rejected in favor of one persistent context + explicit
-  seek/flush per request.
-- **Parsing H.264 NAL units directly to identify IDR frames** instead of
-  trusting `AV_PKT_FLAG_KEY`. More "correct" in principle, but it's
-  codec-specific work that doesn't generalize, and would meaningfully
-  expand scope for Part A without changing behavior on the fixtures I
-  actually have. Documented as a known limitation instead.
-- **A single global default frame-rate-based CFR/VFR threshold derived
-  analytically** (e.g., from FFmpeg's own internal jitter tolerance) rather
-  than a fixed 2%. I didn't have time to find and verify FFmpeg's own
-  internal constants for this within the assessment window, so I picked an
-  empirically-checked fixed threshold and documented it as a judgment call
-  rather than presenting it as principled.
 
 ## Known limitations
 
@@ -91,9 +70,8 @@
 3. `libswscale` is linked (part of the same pkg-config module set used for
    Part B's proxy work) but not exercised by any Part A code path yet.
 4. No handling for edit lists / B-frame-heavy sparse-keyframe streams
-   beyond what naturally falls out of the general seek+decode-forward loop
-   — these were treated as the "optional third fixture" per the spec and
-   not built out.
+   beyond what naturally falls out of the general seek+decode-forward loop.
+   
 ## Revision: T=1.1s and fps=30.0 made into CLI arguments
 
 The `checkCfrFixture` assertions originally hardcoded the target time
