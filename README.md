@@ -182,6 +182,23 @@ Headline result: short-GOP (`-g 60 -bf 2`) is 42% smaller on disk but its
 median/worst-case frame-request time (137ms / 486ms) is roughly 14x/22x
 worse than all-intra (10ms / 22ms) in this software-decode benchmark —
 recommendation and confounders are in `EVIDENCE_PART_B.md` §6.
+
+## Part C — desktop media and timeline research
+
+See `part_c/DECISION_MEMO.md` (938 words, under the 1,200-word limit) for
+the full comparison and recommendation, and `part_c/RESEARCH_LOG_PART_C.md`
+for sources. No code — this is a research/architecture memo, as specified.
+
+Headline: **Hybrid** (C++ for demux/decode/hardware-codec/platform-GPU
+integration, Rust for orchestration — timeline, scheduler/clock, `wgpu`
+compositor — via a `cxx` FFI boundary) is recommended over C++-first or
+Rust-first, primarily because research found no mature pure-Rust H.264/HEVC
+decoder — a "Rust-first" core would still FFI into FFmpeg for exactly the
+code Parts A/B already have working in C++, at extra cost for no safety
+benefit on the highest-risk code path. Full reasoning, component boundary,
+browser/desktop ownership split, and 3 risks with smallest experiments are
+in the memo.
+
 ## Known limitations
 
 - Keyframe detection relies on `AV_PKT_FLAG_KEY` as set by the demuxer, not
