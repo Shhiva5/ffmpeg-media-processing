@@ -111,7 +111,9 @@ or copyrighted media) into `fixtures/`:
 
 A third "difficult case" fixture (non-zero start time / sparse keyframes /
 truncated file) was **not** submitted; per the assessment this is optional
-bonus evidence.
+bonus evidence. The truncated/malformed-input failure path is instead
+exercised ad hoc (see `EVIDENCE.md`) by generating a truncated file locally,
+without shipping it as a fixture.
 
 ## Testing
 
@@ -160,6 +162,26 @@ assertions (7 for `cfr`, 3 for `vfr`) catches.
   frees all FFmpeg resources on every exit path (verified with Valgrind, 0
   definitely/indirectly lost bytes — see `EVIDENCE.md`)
 
+## Part B — browser codec support
+
+See `part_b/EVIDENCE_PART_B.md` for full results, `part_b/HANDOFF_CONTRACT.md`
+for the browser/native handoff spec, and `part_b/DECISIONS_PART_B.md` for
+assumptions/limitations. Quick reproduction:
+
+```bash
+./scripts/generate_proxies.sh   # writes part_b/source_master.mp4,
+                                  # part_b/proxy_allintra.mp4,
+                                  # part_b/proxy_shortgop.mp4
+
+TARGETS="0.0,0.1,1.0,1.9,5.5,10.0,13.75,21.333,27.9,29.9"
+./build/media-core part_b/proxy_allintra.mp4  --targets "$TARGETS" --output part_b/allintra_report.json --trace-limit 10
+./build/media-core part_b/proxy_shortgop.mp4  --targets "$TARGETS" --output part_b/shortgop_report.json --trace-limit 10
+```
+
+Headline result: short-GOP (`-g 60 -bf 2`) is 42% smaller on disk but its
+median/worst-case frame-request time (137ms / 486ms) is roughly 14x/22x
+worse than all-intra (10ms / 22ms) in this software-decode benchmark —
+recommendation and confounders are in `EVIDENCE_PART_B.md` §6.
 ## Known limitations
 
 - Keyframe detection relies on `AV_PKT_FLAG_KEY` as set by the demuxer, not

@@ -1,0 +1,380 @@
+{
+  "errors": [],
+  "frame_requests": [
+    {
+      "decode_time_ms": 7.285897,
+      "duration_s": 0.03333333333333333,
+      "error": null,
+      "fallback": null,
+      "found": true,
+      "frames_processed": 2,
+      "next_pts_s": 0.03333333333333333,
+      "packets_processed": 4,
+      "seek_keyframe_pts_s": 0.0,
+      "selected_pts_s": 0.0,
+      "target_s": 0.0,
+      "timing_error_s": 0.0
+    },
+    {
+      "decode_time_ms": 12.62351,
+      "duration_s": 0.033333333333333326,
+      "error": null,
+      "fallback": null,
+      "found": true,
+      "frames_processed": 5,
+      "next_pts_s": 0.13333333333333333,
+      "packets_processed": 7,
+      "seek_keyframe_pts_s": 0.0,
+      "selected_pts_s": 0.1,
+      "target_s": 0.1,
+      "timing_error_s": 0.0
+    },
+    {
+      "decode_time_ms": 71.75861,
+      "duration_s": 0.033333333333333215,
+      "error": null,
+      "fallback": null,
+      "found": true,
+      "frames_processed": 32,
+      "next_pts_s": 1.0333333333333332,
+      "packets_processed": 34,
+      "seek_keyframe_pts_s": 0.0,
+      "selected_pts_s": 1.0,
+      "target_s": 1.0,
+      "timing_error_s": 0.0
+    },
+    {
+      "decode_time_ms": 147.750662,
+      "duration_s": 0.03333333333333344,
+      "error": null,
+      "fallback": null,
+      "found": true,
+      "frames_processed": 59,
+      "next_pts_s": 1.9333333333333333,
+      "packets_processed": 61,
+      "seek_keyframe_pts_s": 0.0,
+      "selected_pts_s": 1.9,
+      "target_s": 1.9,
+      "timing_error_s": 0.0
+    },
+    {
+      "decode_time_ms": 126.905223,
+      "duration_s": 0.033333333333333215,
+      "error": null,
+      "fallback": null,
+      "found": true,
+      "frames_processed": 47,
+      "next_pts_s": 5.533333333333333,
+      "packets_processed": 49,
+      "seek_keyframe_pts_s": 4.0,
+      "selected_pts_s": 5.5,
+      "target_s": 5.5,
+      "timing_error_s": 0.0
+    },
+    {
+      "decode_time_ms": 19.790565,
+      "duration_s": 0.033333333333333215,
+      "error": null,
+      "fallback": null,
+      "found": true,
+      "frames_processed": 2,
+      "next_pts_s": 10.033333333333333,
+      "packets_processed": 4,
+      "seek_keyframe_pts_s": 10.0,
+      "selected_pts_s": 10.0,
+      "target_s": 10.0,
+      "timing_error_s": 0.0
+    },
+    {
+      "decode_time_ms": 257.67783,
+      "duration_s": 0.033333333333333215,
+      "error": null,
+      "fallback": null,
+      "found": true,
+      "frames_processed": 54,
+      "next_pts_s": 13.766666666666666,
+      "packets_processed": 56,
+      "seek_keyframe_pts_s": 12.0,
+      "selected_pts_s": 13.733333333333333,
+      "target_s": 13.75,
+      "timing_error_s": -0.016666666666667496
+    },
+    {
+      "decode_time_ms": 264.477893,
+      "duration_s": 0.03333333333333144,
+      "error": null,
+      "fallback": null,
+      "found": true,
+      "frames_processed": 41,
+      "next_pts_s": 21.333333333333332,
+      "packets_processed": 43,
+      "seek_keyframe_pts_s": 20.0,
+      "selected_pts_s": 21.3,
+      "target_s": 21.333,
+      "timing_error_s": -0.0329999999999977
+    },
+    {
+      "decode_time_ms": 482.45581,
+      "duration_s": 0.03333333333333499,
+      "error": null,
+      "fallback": null,
+      "found": true,
+      "frames_processed": 59,
+      "next_pts_s": 27.933333333333334,
+      "packets_processed": 61,
+      "seek_keyframe_pts_s": 26.0,
+      "selected_pts_s": 27.9,
+      "target_s": 27.9,
+      "timing_error_s": 0.0
+    },
+    {
+      "decode_time_ms": 486.264198,
+      "duration_s": 0.03333333333333499,
+      "error": null,
+      "fallback": null,
+      "found": true,
+      "frames_processed": 59,
+      "next_pts_s": 29.933333333333334,
+      "packets_processed": 60,
+      "seek_keyframe_pts_s": 28.0,
+      "selected_pts_s": 29.9,
+      "target_s": 29.9,
+      "timing_error_s": 0.0
+    }
+  ],
+  "frame_trace": [
+    {
+      "pict_type": "I",
+      "presentation_index": 0,
+      "pts_s": 0.0
+    },
+    {
+      "pict_type": "B",
+      "presentation_index": 1,
+      "pts_s": 0.03333333333333333
+    },
+    {
+      "pict_type": "B",
+      "presentation_index": 2,
+      "pts_s": 0.06666666666666667
+    },
+    {
+      "pict_type": "P",
+      "presentation_index": 3,
+      "pts_s": 0.1
+    },
+    {
+      "pict_type": "B",
+      "presentation_index": 4,
+      "pts_s": 0.13333333333333333
+    },
+    {
+      "pict_type": "B",
+      "presentation_index": 5,
+      "pts_s": 0.16666666666666666
+    },
+    {
+      "pict_type": "P",
+      "presentation_index": 6,
+      "pts_s": 0.2
+    },
+    {
+      "pict_type": "B",
+      "presentation_index": 7,
+      "pts_s": 0.23333333333333334
+    },
+    {
+      "pict_type": "B",
+      "presentation_index": 8,
+      "pts_s": 0.26666666666666666
+    },
+    {
+      "pict_type": "P",
+      "presentation_index": 9,
+      "pts_s": 0.3
+    }
+  ],
+  "generated_at": "2026-08-28T11:47:49Z",
+  "input": "part_b/proxy_shortgop.mp4",
+  "keyframe_index": [
+    {
+      "gap_to_next_s": 2.0,
+      "index": 0,
+      "pts_s": 0.0
+    },
+    {
+      "gap_to_next_s": 2.0,
+      "index": 1,
+      "pts_s": 2.0
+    },
+    {
+      "gap_to_next_s": 2.0,
+      "index": 2,
+      "pts_s": 4.0
+    },
+    {
+      "gap_to_next_s": 2.0,
+      "index": 3,
+      "pts_s": 6.0
+    },
+    {
+      "gap_to_next_s": 2.0,
+      "index": 4,
+      "pts_s": 8.0
+    },
+    {
+      "gap_to_next_s": 2.0,
+      "index": 5,
+      "pts_s": 10.0
+    },
+    {
+      "gap_to_next_s": 2.0,
+      "index": 6,
+      "pts_s": 12.0
+    },
+    {
+      "gap_to_next_s": 2.0,
+      "index": 7,
+      "pts_s": 14.0
+    },
+    {
+      "gap_to_next_s": 2.0,
+      "index": 8,
+      "pts_s": 16.0
+    },
+    {
+      "gap_to_next_s": 2.0,
+      "index": 9,
+      "pts_s": 18.0
+    },
+    {
+      "gap_to_next_s": 2.0,
+      "index": 10,
+      "pts_s": 20.0
+    },
+    {
+      "gap_to_next_s": 2.0,
+      "index": 11,
+      "pts_s": 22.0
+    },
+    {
+      "gap_to_next_s": 2.0,
+      "index": 12,
+      "pts_s": 24.0
+    },
+    {
+      "gap_to_next_s": 2.0,
+      "index": 13,
+      "pts_s": 26.0
+    },
+    {
+      "gap_to_next_s": null,
+      "index": 14,
+      "pts_s": 28.0
+    }
+  ],
+  "packet_trace": [
+    {
+      "dts_s": -0.06666666666666667,
+      "index": 0,
+      "keyframe": true,
+      "pts_s": 0.0,
+      "size_bytes": 48133
+    },
+    {
+      "dts_s": -0.03333333333333333,
+      "index": 1,
+      "keyframe": false,
+      "pts_s": 0.1,
+      "size_bytes": 13448
+    },
+    {
+      "dts_s": 0.0,
+      "index": 2,
+      "keyframe": false,
+      "pts_s": 0.03333333333333333,
+      "size_bytes": 5193
+    },
+    {
+      "dts_s": 0.03333333333333333,
+      "index": 3,
+      "keyframe": false,
+      "pts_s": 0.06666666666666667,
+      "size_bytes": 6689
+    },
+    {
+      "dts_s": 0.06666666666666667,
+      "index": 4,
+      "keyframe": false,
+      "pts_s": 0.2,
+      "size_bytes": 22375
+    },
+    {
+      "dts_s": 0.1,
+      "index": 5,
+      "keyframe": false,
+      "pts_s": 0.13333333333333333,
+      "size_bytes": 10801
+    },
+    {
+      "dts_s": 0.13333333333333333,
+      "index": 6,
+      "keyframe": false,
+      "pts_s": 0.16666666666666666,
+      "size_bytes": 9948
+    },
+    {
+      "dts_s": 0.16666666666666666,
+      "index": 7,
+      "keyframe": false,
+      "pts_s": 0.3,
+      "size_bytes": 25584
+    },
+    {
+      "dts_s": 0.2,
+      "index": 8,
+      "keyframe": false,
+      "pts_s": 0.23333333333333334,
+      "size_bytes": 13245
+    },
+    {
+      "dts_s": 0.23333333333333334,
+      "index": 9,
+      "keyframe": false,
+      "pts_s": 0.26666666666666666,
+      "size_bytes": 13118
+    }
+  ],
+  "requested_targets_s": [
+    0.0,
+    0.1,
+    1.0,
+    1.9,
+    5.5,
+    10.0,
+    13.75,
+    21.333,
+    27.9,
+    29.9
+  ],
+  "selection_rule": "For an arbitrary timeline time T (seconds, relative to stream start): seek to the latest keyframe with presentation timestamp <= T (or the first keyframe in the file if T is before it), flush the decoder, then decode forward in presentation order. The SELECTED FRAME is the last decoded frame whose PTS <= T. If a subsequently decoded frame has PTS > T, its timestamp is reported as next_pts_s, and duration_s = next_pts_s - selected_pts_s approximates the display duration of the selected frame. Boundary handling: (1) if T is before the PTS of the very first frame in the file, the first frame is selected and fallback=clamped_to_first_frame; (2) if T is at or after the last decodable frame's PTS, that last frame is selected and fallback=clamped_to_last_frame, with next_pts_s unavailable. We do NOT assume frame_index = floor(T * nominal_fps); the selection is always based on decoded PTS values, which is what makes it correct for VFR content and for streams with a non-zero start_time.",
+  "stream_summary": {
+    "avg_frame_rate": "30/1",
+    "cfr_vfr_basis": "Measured 119 decoded frame intervals: mean=0.033333s, stddev=0.000000s, coefficient_of_variation=0.0000 (threshold 0.02). Container avg_frame_rate=30/1, r_frame_rate=30/1 were NOT used as the sole basis.",
+    "cfr_vfr_verdict": "CFR",
+    "codec": "h264",
+    "container_format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+    "duration_s": 30.0,
+    "frames_sampled_for_cfr_vfr": 120,
+    "height": 720,
+    "mean_frame_interval_s": 0.03333333333333333,
+    "pixel_format": "yuv420p",
+    "r_frame_rate_nominal": "30/1",
+    "start_time_s": 0.0,
+    "stddev_frame_interval_s": 1.5015569381365261e-16,
+    "stream_time_base": "1/15360",
+    "width": 1280
+  },
+  "tool": "media-core",
+  "version": "0.1.0"
+}
